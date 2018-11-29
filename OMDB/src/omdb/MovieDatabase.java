@@ -25,13 +25,14 @@ public class MovieDatabase {
             BufferedReader reader;
             reader = new BufferedReader(new FileReader(filepath));
             String line = reader.readLine();
+            //line by line add Movies to database
             while (line != null) {
                 database.add(new Movie(line));
                 line = reader.readLine();
             }
             reader.close();
         } catch (IOException e) {
-            System.out.println("Error:" + e.getMessage());
+            System.out.println("Error:" + e.getMessage()); //usu. file doesn't exist
         }
     }
 
@@ -53,30 +54,22 @@ public class MovieDatabase {
                 database.removeIf(s -> !s.getGenres().contains(value.toString()));
                 break;
             default:
-                System.out.println("Field didn't work:" + field);
+                System.out.println("Filter unused for field:" + field);
                 break;
         }
     }
 
+    public void reverseDatabase(){
+        Collections.reverse(database);
+    }
+    
     public void printDatabase() {
         for (Movie m : database) {
             System.out.println(m.toString());
         }
     }
 
-    public int getSize() {
-        return database.size();
-    }
-    
-    public Movie getMovie(int index, boolean biggest) {
-        return database.get(biggest ? database.size() - index : index - 1);
-    }
-
-    public ArrayList<Movie> getDatabase() {
-        return database;
-    }
-
-    public void setDatabase(ArrayList<Movie> database) {
-        this.database = database;
+    public Movie getMovie(int index) {
+        return database.get(index);
     }
 }

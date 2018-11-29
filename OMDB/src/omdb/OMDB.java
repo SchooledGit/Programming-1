@@ -17,22 +17,31 @@ public class OMDB {
         //The entire collection of films in chronological order
         database.sort();
         database.printDatabase();
-        System.out.println();
+        
+        System.out.println(); //differentiate the collection of films to the other answers
 
         //Third longest film noir
         database.filter("genres", "Film-Noir");
         database.sort(new MovieDurationComparator());
-        System.out.println(database.getMovie(3, true).toString());
+        database.reverseDatabase(); //sorted ascending, we want descending
+        
+        System.out.println(database.getMovie(2).toString());
 
         //Eighth most recent "UNRATED"
-        database.readFile(filepath);
-        database.sort();
-        database.filter("certificate", "UNRATED");
-        System.out.println(database.getMovie(8, true).toString());
+        database.readFile(filepath); //reload database due to filter
         
+        database.filter("certificate", "UNRATED");
+        database.sort();
+        database.reverseDatabase(); //sorted ascending, we want descending
+        
+        System.out.println(database.getMovie(7).toString());
+
         //Film with the longest name
-        database.readFile(filepath);
+        database.readFile(filepath); //reload database due to filter
+        
         database.sort(new MovieTitleLengthComparator());
-        System.out.println(database.getMovie(1, true).toString());
+        database.reverseDatabase(); //sorted ascending, we want descending
+        
+        System.out.println(database.getMovie(0).toString());
     }
 }

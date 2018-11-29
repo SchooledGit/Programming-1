@@ -14,7 +14,7 @@ public class Movie implements Comparable<Movie> {
     String genres;
     int duration;
     int rating;
-
+    
     public Movie() {
         title = "";
         year = 0;
@@ -24,47 +24,41 @@ public class Movie implements Comparable<Movie> {
         rating = 0;
     }
 
-    public Movie(String t, int y, String c, String g, int d, int r) {
-        title = t;
-        year = y;
-        certificate = c;
-        genres = g;
-        duration = d;
-        rating = r;
-    }
-
     public Movie(String line) {
-        this(); //allocate memory
+        this(); //Default values
         String[] splits = line.split(",");
 
-        //get index of year
-        int index = 1;
+        int yearIndex = 1;
         //https://stackoverflow.com/questions/5439529/determine-if-a-string-is-an-integer-in-java
-        while (!splits[index].matches("\\d+") && index < splits.length - 1) {
-            ++index;
+        //Checks if the current index is all digits i.e. a year, by matching regular expression
+        while (!splits[yearIndex].matches("\\d+")) {
+            ++yearIndex;
         }
-        for (int i = 0; i < index; ++i) {
-            title += splits[i]; //make title
+
+        //concat all the splits, upto and not including year, to title
+        for (int i = 0; i < yearIndex; ++i) {
+            title += splits[i];
         }
-        //remaining data
-        year = Integer.parseInt(splits[index]);
-        certificate = splits[index + 1];
-        genres = splits[index + 2];
-        duration = Integer.parseInt(splits[index + 3]);
-        rating = Integer.parseInt(splits[index + 4]);
+        //fill in remaining data
+        year = Integer.parseInt(splits[yearIndex]);
+        certificate = splits[yearIndex + 1];
+        genres = splits[yearIndex + 2];
+        duration = Integer.parseInt(splits[yearIndex + 3]);
+        rating = Integer.parseInt(splits[yearIndex + 4]);
     }
 
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
         Formatter f = new Formatter(sb);
-        String p = "%s,"; //pattern
+        String p = "%s,"; //to match the format of the original file
+        
         f.format(p, title);
         f.format(p, year);
         f.format(p, certificate);
         f.format(p, genres);
         f.format(p, getDuration());
-        sb.append(rating);
+        f.format("%s", getDuration());
 
         return sb.toString();
     }
