@@ -20,33 +20,36 @@ public class MovieDatabase {
     }
 
     public void readFile(String filepath) {
-        //https://stackoverflow.com/questions/5868369/how-to-read-a-large-text-file-line-by-line-using-java
-        try {
-            BufferedReader reader;
-            reader = new BufferedReader(new FileReader(filepath));
-            String line = reader.readLine();
-            //line by line add Movies to database
-            while (line != null) {
+        /*
+        https://stackoverflow.com/questions/5868369/how-to-read-a-large-text-file-line-by-line-using-java
+            Used the updated method, adding a catch for IOException
+         */
+        try (BufferedReader reader = new BufferedReader(new FileReader(filepath))) {
+            for (String line; (line = reader.readLine()) != null;) {
                 database.add(new Movie(line));
-                line = reader.readLine();
             }
             reader.close();
         } catch (IOException e) {
-            System.out.println("Error:" + e.getMessage()); //usu. file doesn't exist
+            System.out.println(e.getMessage());
         }
-    }
 
+    }
     public void sort() {
+        //https://www.javadevjournal.com/java/java-sorting-example-comparable-comparator/
         Collections.sort(database);
     }
 
     public void sort(Comparator<Movie> c) {
+        //https://www.javadevjournal.com/java/java-sorting-example-comparable-comparator/, "Comparator with multi options"
         Collections.sort(database, c);
     }
 
     public void filter(String field, Object value) {
         switch (field) {
-            //https://stackoverflow.com/questions/9146224/arraylist-filter
+            /*
+            https://stackoverflow.com/questions/9146224/arraylist-filter
+                Used the removeIf method in switch case statements, depending on field type
+            */
             case "certificate":
                 database.removeIf(s -> !s.getCertificate().contains(value.toString()));
                 break;
@@ -58,11 +61,11 @@ public class MovieDatabase {
                 break;
         }
     }
-
-    public void reverseDatabase(){
+    //https://www.geeksforgeeks.org/collections-reverse-java-examples/
+    public void reverseDatabase() {
         Collections.reverse(database);
     }
-    
+
     public void printDatabase() {
         for (Movie m : database) {
             System.out.println(m.toString());
